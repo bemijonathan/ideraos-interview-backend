@@ -5,15 +5,16 @@ import { json, urlencoded } from "body-parser";
 import { dbConnection } from "./config/db";
 import AuthRouter from "./utils/auth.route";
 import userRoute from "./resources/users/user.route";
-import { cloudinaryConfig } from "./config/cloudinary.config";
+import multer from "multer";
 
 const app = express();
+let upload = multer();
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use(cloudinaryConfig);
+app.use(upload.single());
 
 // routes
 app.use("/api/auth", AuthRouter);
