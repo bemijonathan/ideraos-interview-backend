@@ -2,7 +2,7 @@ export const getOne = (model) => async (req, res) => {
 	try {
 		const doc = await model
 			.findOne({ _id: req.params.id })
-			.select(" email _id about image")
+			.select(" email _id about image name")
 			.lean()
 			.exec();
 
