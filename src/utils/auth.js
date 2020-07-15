@@ -67,7 +67,7 @@ export const signin = async (req, res) => {
 			return res.status(401).send(invalid);
 		}
 		const token = newToken(user);
-		return res.status(201).send({ token });
+		return res.status(201).send({ token, id: user.id });
 	} catch (e) {
 		console.error(e);
 		res.status(500).end();
