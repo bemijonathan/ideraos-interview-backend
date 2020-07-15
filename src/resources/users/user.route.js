@@ -1,14 +1,15 @@
 import { Router } from "express";
+import { protect } from "../../utils/auth";
 import controller from "./users.controllers";
 
-const userRoute = Router();
+const router = Router();
 
-userRoute.route("/").get(controller.getMany);
+router
+	.route("/")
+	.get(controller.getMany)
+	.patch(protect, controller.updateOne)
+	.delete(protect, controller.removeOne);
 
-userRoute
-  .route("id")
-  .patch(controller.updateOne)
-  .delete(controller.removeOne)
-  .get(controller.getOne);
+router.route("/:id").get(protect, controller.getOne);
 
-export default userRoute;
+export default router;

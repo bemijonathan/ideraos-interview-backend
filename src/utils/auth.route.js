@@ -7,23 +7,23 @@ import { signin, signup, forgotEmail, newEmail } from "./auth";
 const AuthRouter = Router();
 
 const validate = (req, res, next) => {
+	const { email, about, name, password } = req.body;
 	if (
-		!req.body.email ||
-		!req.body.about ||
-		!req.body.name ||
-		!req.body.password.trim()
+		email.length > 0 &&
+		about.length > 20 &&
+		name.length > 0 &&
+		password.length > 0
 	) {
-		console.log(req.body, req.file);
-		return res.status(400).send({ error: "missing fields" });
-	} else {
 		next();
+	} else {
+		return res.status(400).send({ error: "missing fields" });
 	}
 };
 
 AuthRouter.route("/recovery").post(forgotEmail).put(newEmail);
 AuthRouter.route("/signup").post(
-	validate,
 	multerUploads,
+	validate,
 	ProductUpload,
 	signup
 );

@@ -16,31 +16,49 @@ export const newToken = (user) => {
 
 export const verifyToken = (token) =>
 	new Promise((resolve, reject) => {
-		jwt.verify(token, config.JWT_TOKEN, (err, payload) => {
-			if (err) return reject(err);
+		jwt.verify(token, "secrtgryfdt", (err, payload) => {
+			if (err) {
+				console.log(err);
+				return reject(err);
+			}
 			resolve(payload);
 		});
 	});
 
 export const signup = async (req, res) => {
+	let body = JSON.parse(JSON.stringify(req.body));
+	console.log(body);
 	try {
-		const user = await User.create(req.body);
+		const { name, password, email, about } = body;
+		const user = await User.create({
+			name,
+			password,
+			email,
+			about,
+			image: body.images.img,
+		});
 		const token = newToken(user);
 		return res.status(201).send({ token });
 	} catch (e) {
-		return res.status(400).send({ e });
+		console.log(e);
+		if (e.errmsg.includes("duplicate")) {
+			return res.status(400).send({ error: "user already exists" });
+		} else {
+			return res.status(400).end();
+		}
 	}
 };
 
 export const signin = async (req, res) => {
-	if (!req.body.email || !req.body.password || !req.b) {
-		return res.status(400).send({ data: "need email and password" });
+	if (!req.body.email || !req.body.password) {
+		return res.status(400).send({ error: "need email and password" });
 	}
 	const invalid = { data: "Invalid email and password combination" };
 	try {
 		const user = await User.findOne({ email: req.body.email })
 			.select("email password")
 			.exec();
+		console.log(req.body);
 		if (!user) {
 			return res.status(401).send(invalid);
 		}
@@ -57,6 +75,7 @@ export const signin = async (req, res) => {
 };
 
 export const protect = async (req, res, next) => {
+	console.log(req.headers);
 	const bearer = req.headers.authorization;
 
 	if (!bearer || !bearer.startsWith("Bearer ")) {

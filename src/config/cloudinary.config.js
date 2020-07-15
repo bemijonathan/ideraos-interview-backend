@@ -1,12 +1,16 @@
-import { config, uploader } from "cloudinary";
+import cloudinary from "cloudinary";
 
 const cloudinaryConfig = (req, res, next) => {
-	config({
-		cloud_name: process.env.CLOUD_NAME,
-		api_key: process.env.API_KEY,
-		api_secret: process.env.API_SECRET,
+	cloudinary.v2.config({
+		cloud_name: "mixed-code",
+		api_key: "488385332347382",
+		api_secret: "pupPqg0NvxxbfjLZm3yd9zu4Qtk",
 	});
 	next();
 };
 
-export { cloudinaryConfig, uploader };
+// CLOUD_NAME=mixedcode
+// API_KEY=252624857599431
+// API_SECRET=2RJ3TC1WS3a4GItCs4cJaBTwJsA
+
+export { cloudinaryConfig };

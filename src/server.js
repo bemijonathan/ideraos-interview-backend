@@ -1,3 +1,6 @@
+import env from "dotenv";
+env.config();
+
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -14,11 +17,10 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use(upload.single());
 
 // routes
 app.use("/api/auth", AuthRouter);
-app.use("/api/user", userRoute);
+app.use("/api/user/", userRoute);
 
 export const start = async (port) => {
 	try {
