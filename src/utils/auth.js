@@ -38,7 +38,7 @@ export const signup = async (req, res) => {
 			image: body.images.img,
 		});
 		const token = newToken(user);
-		return res.status(201).send({ token });
+		return res.status(201).send({ token, id: user.id });
 	} catch (e) {
 		console.log(e);
 		if (e.errmsg.includes("duplicate")) {
