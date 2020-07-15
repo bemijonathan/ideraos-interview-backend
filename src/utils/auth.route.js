@@ -10,7 +10,7 @@ const validate = (req, res, next) => {
 	const { email, about, name, password } = req.body;
 	if (
 		email.length > 0 &&
-		about.length > 20 &&
+		about.length > 0 &&
 		name.length > 0 &&
 		password.length > 0
 	) {
